@@ -108,10 +108,6 @@ sub   2048R/zzz 2020-03-24
 pub   2048R/xxx 2020-03-24
 uid                  Private Image Signer (Private Image Signer) <test@example.com>
 sub   2048R/zzz 2020-03-24
-
-# gpg2 --armor --export --output /var/www/html/sigstore/registry.ocp.rhev.local.gpg test@example.com
-# chmod 400 /var/www/html/sigstore/registry.ocp.rhev.local.gpg 
-# chown apache. /var/www/html/sigstore/registry.ocp.rhev.local.gpg
 ```
 
 ## Export and copy your private key to sign images
@@ -119,9 +115,9 @@ sub   2048R/zzz 2020-03-24
 ```cmd
 # gpg2 --export-secret-keys -a test@example.com > private-key-imagesigner.asc
 # scp private-key-imagesigner.asc your@host-for-signing-images:/path/to/
-host-for-signing-images ~$ gpg2 --import private-key-imagesigner.asc
-host-for-signing-images ~$ # gpg2 --list-keys
-$HOME/.gnupg/pubring.gpg
+host-for-signing-images ~# gpg2 --import private-key-imagesigner.asc
+host-for-signing-images ~# gpg2 --list-keys
+/root/.gnupg/pubring.gpg
 pub   2048R/xxx 2020-03-24
 uid                  Private Image Signer (Private Image Signer) <test@example.com>
 sub   2048R/zzz 2020-03-24# gpg2 --list-keys
@@ -130,7 +126,8 @@ sub   2048R/zzz 2020-03-24# gpg2 --list-keys
 ## Push image with sign
 
 ```cmd
-$ sudo atomic push --insecure --sign-by test@example.com registry.ocp.rhev.local:5000/test/echo:latest
+// you can also use skopeo to push the local image with sign.
+# atomic push --insecure --sign-by test@example.com registry.ocp.rhev.local:5000/test/echo:latest
 Registry username: regadmin
 Registry password: 
 Copying blob 3ad2c2cb58aa done
@@ -142,6 +139,7 @@ Writing manifest to image destination
 Signing manifest
 Storing signatures
 
+// Look the signature for the pusshed image.
 # cd /var/lib/atomic/sigstore/test/
 # ll
 total 0
@@ -152,6 +150,7 @@ drwxr-xr-x. 2 root root 25 Mar 24 18:56 echo@sha256=9043ced01de6c4964c6536c0486c
 total 1
 -rw-r--r--. 1 root root 585 Mar 24 18:56 signature-1
 
+// sync the signature with remote httpd web server for exposing externally.
 # rsync -av /var/lib/atomic/sigstore registry.ocp.rhev.local:/var/www/html/sigstore
 ```
 
@@ -159,6 +158,7 @@ total 1
 
 
 ```cmd
+// Change the policy to reject all request for image without the signature configured.
 # cat /etc/containers/policy.json
 {
     "default": [
@@ -185,17 +185,20 @@ total 1
         }
 }
 
+// the remote image cannot pull due to not fetching the signature.
 # podman pull registry.ocp.rhev.local:5000/test/echo:latest
 Trying to pull registry.ocp.rhev.local:5000/test/echo:latest...ERRO[0000] Error pulling image ref //registry.ocp.rhev.local:5000/test/echo:latest: Source image rejected: A signature was required, but no signature exists 
 Failed
 Error: error pulling image "registry.ocp.rhev.local:5000/test/echo:latest": unable to pull registry.ocp.rhev.local:5000/test/echo:latest: unable to pull image: Source image rejected: A signature was required, but no signature exists
 
+// Configure where the signature can refer from.
 # cat /etc/containers/registries.d/private-registry.yaml 
 docker:
   registry.ocp.rhev.local:5000:
     sigstore-staging: file:///var/lib/atomic/sigstore
     sigstore: http://registry.ocp.rhev.local:8080/sigstore
 
+// You can pull after that.
 # podman pull registry.ocp.rhev.local:5000/test/echo:latest
 Trying to pull registry.ocp.rhev.local:5000/test/echo:latest...Getting image source signatures
 Checking if image destination supports signatures
@@ -208,3 +211,5 @@ Writing manifest to image destination
 Storing signatures
 186db29b42166f9e65ef276813e90c28d0efbca320671c41c1ee851694663eac
 ```
+
+Done.

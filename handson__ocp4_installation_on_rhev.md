@@ -18,7 +18,7 @@ etcd-2.ocp43.rhev.local     | 192.168.10.22                            | etcd-2 
 worker-0.ocp43.rhev.local   | 192.168.10.23, 192.168.20.23             | worker-0 for worker node
 worker-1.ocp43.rhev.local   | 192.168.10.24, 192.168.20.24             | worker-1 for worker node
 
-![ocp4 network diagram](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_network.png)
+![ocp4 network diagram](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_network_diagram.png)
 
 ## Prerequisites
 
@@ -279,7 +279,7 @@ Then the VM will start.
 
 ### Input kernel parameter to RHCOS boot page
 
-WATCH OUT, you should recognize your vNIC and disk device name in advance.
+WATCH OUT, you should recognize your vNIC and disk device name on your RHV in advance.
 Usually, NIC device names as "ensX" format, such as first NIC is "ens3" and second one is "ens4".
 Disk device also names as "vdX" format, such as first disk is "vda" and second is "vdb".
  
@@ -315,6 +315,8 @@ ip=192.168.10.23::192.168.10.10:255.255.255.0:worker-0.ocp43.rhev.local:ens3:non
 nameserver=192.168.10.10
 ip=192.168.20.23:::255.255.255.0::ens4:none
 ```
+
+Reboot each host after installation of the RHCOS, but the ISO will not unmount automatically due to remaining BIOS configuration, so you should shutdown once at that time and start each host again without ISO image.
 
 ### Install OCP4
 

@@ -71,7 +71,8 @@ Upload "rhcos-4.3.0-x86_64-installer.iso" to ISO disk domain in advance on your 
 192.168.10.24 worker-1.ocp43.rhev.local
 # bootstrap
 192.168.10.99 bootstrap.ocp43.rhev.local
-
+```
+```cmd
 # cat /etc/dnsmasq.d/ocp4.conf
 domain-needed
 bogus-priv
@@ -168,7 +169,7 @@ backend ingress-https-443
 
 ### Configure httpd web server to use with installation contents provider
 
-```
+```cmd
 // Expected directory and included files
 /var/www/html/ocp43/
 ├── ign
@@ -179,7 +180,7 @@ backend ingress-https-443
     └── bios.raw.gz   (owner: apache, group: apache, 0400)
 ```
 
-```
+```cmd
 # sed -i s/Listen 80/Listen 8080/g /etc/httpd/conf/httpd.conf
 # mkdir /var/www/html/ocp43/{ign,img} -p
 # systemctl restart httpd
@@ -334,7 +335,8 @@ master-1.ocp43.kvm.local   Ready       master   1h     v1.16.2
 master-2.ocp43.kvm.local   Ready       master   1h     v1.16.2
 worker-0.ocp43.kvm.local   NotReady    worker   55s    v1.16.2
 worker-1.ocp43.kvm.local   NotReady    worker   59s    v1.16.2
-
+```
+```cmd
 $ oc get csr -o name | xargs oc adm certificate approve
 ```
 

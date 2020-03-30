@@ -18,12 +18,15 @@ etcd-2.ocp43.rhev.local     | 192.168.10.22                            | etcd-2 
 worker-0.ocp43.rhev.local   | 192.168.10.23, 192.168.20.23             | worker-0 for worker node
 worker-1.ocp43.rhev.local   | 192.168.10.24, 192.168.20.24             | worker-1 for worker node
 
-![OCP4 network diagram](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_network.png)
+![ocp4 network diagram](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_network.png)
 
 ## Prerequisites
 
 First of all, we should create a RHEL7 VM(Bastion-server) on RHV before installation, it works as NW router to connect with Internet, LB to control access to ingress and master, DNS and contents provider server to be required to installation(ignition files and a bios image).
 Upload "rhcos-4.3.0-x86_64-installer.iso" to ISO disk domain in advance on your RHV system.
+
+![ocp4 bastion config on rhev](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_bastion.png)
+
 
 ### Register repositories for installing packages and so on 
 ```cmd

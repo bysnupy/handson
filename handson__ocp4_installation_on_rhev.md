@@ -25,7 +25,7 @@ worker-1.ocp43.rhev.local   | 192.168.10.24, 192.168.20.24             | worker-
 First of all, we should create a RHEL7 VM(Bastion-server) on RHV before installation, it works as NW router to connect with Internet, LB to control access to ingress and master, DNS and contents provider server to be required to installation(ignition files and a bios image).
 Upload "rhcos-4.3.0-x86_64-installer.iso" to ISO disk domain in advance on your RHV system.
 
-![ocp4 bastion config on rhev](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_bastion.png)
+![ocp4 bastion config on rhev](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_creatingvm.png)
 
 
 ### Register repositories for installing packages and so on 
@@ -271,6 +271,8 @@ You should run each of the bootstrap, master hosts and worker host individually 
 3. Expand "Boot Options" and check "Attach CD" with "rhcos-4.3.0-x86_64-installer.iso".
 4. Uncheck "Enable menu to select boot device" and make CD-ROM move to most up side using "Up" button.
 5. Complete to click "OK" button the bottom on the left side of the dialog.
+
+![runonce dialog](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_runonce.png)
 
 Then the VM will start.
 

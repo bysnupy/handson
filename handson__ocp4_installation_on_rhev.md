@@ -18,7 +18,7 @@ etcd-2.ocp43.rhev.local     | 192.168.10.22                            | etcd-2 
 worker-0.ocp43.rhev.local   | 192.168.10.23, 192.168.20.23             | worker-0 for worker node
 worker-1.ocp43.rhev.local   | 192.168.10.24, 192.168.20.24             | worker-1 for worker node
 
-![ocp4 network diagram](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_network_diagram.png)
+![ocp4 network diagram](https://github.com/bysnupy/handson/blob/master/ocp4_install_rhv_networks.png)
 
 ## Prerequisites
 

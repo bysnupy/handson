@@ -114,7 +114,7 @@ etcd-1.dapark-ocp43ipi.example.com:
   10.0.68.220 -> 10.0.68.253
 ```
 
-## Remove existing etcd member and add new etcd member to existing etcd cluster
+## Remove the etcd member on terminated master node and add new etcd member to existing etcd cluster
 
 ```cmd
 $ oc get pod
@@ -172,7 +172,7 @@ ETCD_INITIAL_CLUSTER_STATE="existing"
 Starting etcd..
 ```
 
-## Verify the etcd and master are recovered without any issue
+## Verify whether the added etcd and master are recovered without any issue
 
 ```cmd
 $ oc get pod -n openshift-etcd

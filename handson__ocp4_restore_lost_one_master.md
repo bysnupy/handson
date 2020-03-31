@@ -96,7 +96,7 @@ ocp43ipi-2n8rc-master-1   Provisioned   m4.xlarge   ap-northeast-1   ap-northeas
 ocp43ipi-2n8rc-master-2   Running       m4.xlarge   ap-northeast-1   ap-northeast-1b   69m
 ```
 
-## Modify the etcd record as new master private IP in Route 53 on AWS after running new master node
+## Modify the etcd record as new master private IP in Route 53 on AWS after new master node Ready
 
 ```cmd
 $ oc get node -l node-role.kubernetes.io/master=

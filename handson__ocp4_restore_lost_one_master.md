@@ -1,8 +1,8 @@
-# Recovery procedures using certificates backup in lost one master node host
+# Recovery using certificates backup in lost one master node
 
 ## Summary
 
-When one master node(ip-10-0-8-220 in this case) is lost due to terminating operation on AWS dashboard, 
+When one master node(ip-10-0-68-220 in this case) is lost due to terminating operation on AWS dashboard, 
 you can restore new master and etcd through following recovery procedures.
 
 ## Environments
@@ -14,9 +14,9 @@ The master nodes are as follows.
 ```cmd
 $ oc get nodes -l node-role.kubernetes.io/master=
 NAME                                            STATUS   ROLES    AGE   VERSION
-ip-10-0-8-185.ap-northeast-1.compute.internal   Ready    master   30m   v1.16.2
-ip-10-0-8-220.ap-northeast-1.compute.internal   Ready    master   29m   v1.16.2
-ip-10-0-8-39.ap-northeast-1.compute.internal    Ready    master   29m   v1.16.2
+ip-10-0-68-185.ap-northeast-1.compute.internal   Ready    master   30m   v1.16.2
+ip-10-0-68-220.ap-northeast-1.compute.internal   Ready    master   29m   v1.16.2
+ip-10-0-68-39.ap-northeast-1.compute.internal    Ready    master   29m   v1.16.2
 ```
 
 The etcd member list is as follows.
@@ -25,9 +25,9 @@ sh-4.2# etcdctl member list -w table
 +------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
 |        ID        | STATUS  |                           NAME                            |                     PEER ADDRS                     |      CLIENT ADDRS       |
 +------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
-| 36393ece354b4c2a | started | etcd-member-ip-10-0-8-220.ap-northeast-1.compute.internal | https://etcd-1.dapark-ocp43ipi.aws.oshift.net:2380 | https://10.0.8.220:2379 |
-| 7270d5446b8a3c49 | started | etcd-member-ip-10-0-8-185.ap-northeast-1.compute.internal | https://etcd-0.dapark-ocp43ipi.aws.oshift.net:2380 | https://10.0.8.185:2379 |
-| f93356c11e58e088 | started |  etcd-member-ip-10-0-8-39.ap-northeast-1.compute.internal | https://etcd-2.dapark-ocp43ipi.aws.oshift.net:2380 |  https://10.0.8.39:2379 |
+| 36393ece354b4c2a | started | etcd-member-ip-10-0-68-220.ap-northeast-1.compute.internal | https://etcd-1.dapark-ocp43ipi.example.com:2380 | https://10.0.68.220:2379 |
+| 7270d5446b8a3c49 | started | etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal | https://etcd-0.dapark-ocp43ipi.example.com:2380 | https://10.0.68.185:2379 |
+| f93356c11e58e088 | started |  etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal | https://etcd-2.dapark-ocp43ipi.example.com:2380 |  https://10.0.68.39:2379 |
 +------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
 ```
 
@@ -55,17 +55,17 @@ Copy the backup and etcd cetificate sets to your bastion server.
 ```cmd
 bastion ~$ ls -1
 assets.tar.gz
-ip-10-0-8-185.ap-northeast-1.compute.internal_etcd_certificates.tar.gz
-ip-10-0-8-220.ap-northeast-1.compute.internal_etcd_certificates.tar.gz
-ip-10-0-8-39.ap-northeast-1.compute.internal_etcd_certificates.tar.gz
+ip-10-0-68-185.ap-northeast-1.compute.internal_etcd_certificates.tar.gz
+ip-10-0-68-220.ap-northeast-1.compute.internal_etcd_certificates.tar.gz
+ip-10-0-68-39.ap-northeast-1.compute.internal_etcd_certificates.tar.gz
 ```
 
-## Terminate a master node(ip-10-0-8-220)
+## Terminate a master node(ip-10-0-68-220)
 
 ```cmd
-// search the instance ID of ip-10-0-8-220 and terminate it with "aws" CLI
+// search the instance ID of ip-10-0-68-220 and terminate it with "aws" CLI
 $ aws ec2 describe-instances | less
-$ aws ec2 terminate-instances --instance-ids <instance ID of ip-10-0-8-220>
+$ aws ec2 terminate-instances --instance-ids <instance ID of ip-10-0-68-220>
 ```
 
 ## Check the master machine status after terminating the instance of that
@@ -102,16 +102,16 @@ dapark-ocp43ipi-2n8rc-master-2   Running       m4.xlarge   ap-northeast-1   ap-n
 ```cmd
 $ oc get node -l node-role.kubernetes.io/master=
 NAME                                            STATUS   ROLES    AGE   VERSION
-ip-10-0-8-185.ap-northeast-1.compute.internal   Ready    master   74m   v1.16.2
-ip-10-0-8-253.ap-northeast-1.compute.internal   Ready    master   69s   v1.16.2   <--- new master node
-ip-10-0-8-39.ap-northeast-1.compute.internal    Ready    master   73m   v1.16.2
+ip-10-0-68-185.ap-northeast-1.compute.internal   Ready    master   74m   v1.16.2
+ip-10-0-68-253.ap-northeast-1.compute.internal   Ready    master   69s   v1.16.2   <--- new master node
+ip-10-0-68-39.ap-northeast-1.compute.internal    Ready    master   73m   v1.16.2
 ```
 
 Modify etcd-1 record change as new master node private IP as follows.
 
 ```cmd
-etcd-1.dapark-ocp43ipi.aws.oshift.net:
-  10.0.8.220 -> 10.0.8.253
+etcd-1.dapark-ocp43ipi.example.com:
+  10.0.68.220 -> 10.0.68.253
 ```
 
 ## Remove existing etcd member and add new etcd member to existing etcd cluster
@@ -119,15 +119,15 @@ etcd-1.dapark-ocp43ipi.aws.oshift.net:
 ```cmd
 $ oc get pod
 NAME                                                        READY   STATUS     RESTARTS   AGE
-etcd-member-ip-10-0-8-185.ap-northeast-1.compute.internal   2/2     Running    0          76m
-etcd-member-ip-10-0-8-253.ap-northeast-1.compute.internal   0/2     Init:1/2   1          4m47s
-etcd-member-ip-10-0-8-39.ap-northeast-1.compute.internal    2/2     Running    0          76m
+etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal   2/2     Running    0          76m
+etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal   0/2     Init:1/2   1          4m47s
+etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal    2/2     Running    0          76m
 ```
 
 Access any master node host where a etcd is running well on and remove the etcd on terminated masster node as follows.
 ```cmd
 $ sudo oc login -u kubeadmin https://localhost:6443 --insecure-skip-tls-verify
-$ sudo -E /usr/local/bin/etcd-member-remove.sh etcd-member-ip-10-0-8-220.ap-northeast-1.compute.internal
+$ sudo -E /usr/local/bin/etcd-member-remove.sh etcd-member-ip-10-0-68-220.ap-northeast-1.compute.internal
 Creating asset directory ./assets
 a5634afc2428b2e7c44dc6fb37085d8e954827469b0807d14fae36f9595d670f
 etcdctl version: 3.3.17
@@ -135,7 +135,7 @@ API version: 3.3
 Trying to backup etcd client certs..
 etcd client certs found in /etc/kubernetes/static-pod-resources/kube-apiserver-pod-5 backing up to ./assets/backup/
 Member 36393ece354b4c2a removed from cluster c3c85a56b49a373e
-etcd member etcd-member-ip-10-0-8-220.ap-northeast-1.compute.internal with 36393ece354b4c2a successfully removed..
+etcd member etcd-member-ip-10-0-68-220.ap-northeast-1.compute.internal with 36393ece354b4c2a successfully removed..
 ```
 
 ## Add new etcd to existing etcd cluster as etcd-1 with the backuped certificate set.
@@ -144,13 +144,13 @@ WATCH OUT, you should execute the following commands on the new master node host
 
 ```cmd
 $ sudo tar zxvf assets.tar.gz -C .
-$ sudo tar zxvf ip-10-0-8-220.ap-northeast-1.compute.internal_etcd_certificates.tar.gz
+$ sudo tar zxvf ip-10-0-68-220.ap-northeast-1.compute.internal_etcd_certificates.tar.gz
 $ sudo -i
 # cd /etc/kubernetes/static-pod-resources/etcd-member/
 # cp -a /home/core/etc/kubernetes/static-pod-resources/etcd-member/* .
 # exit
 $ sudo oc login -u kubeadmin https://localhost:6443 --insecure-skip-tls-verify
-$ sudo -E /usr/local/bin/etcd-member-add.sh 10.0.8.39 etcd-member-ip-10-0-8-253.ap-northeast-1.compute.internal
+$ sudo -E /usr/local/bin/etcd-member-add.sh 10.0.68.39 etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal
 7f9257bf34686b67f845adf377fa6790dd83c67553ce03fe48218bfde5e4783e
 etcdctl version: 3.3.17
 API version: 3.3
@@ -165,9 +165,9 @@ Updating etcd membership..
 Removing etcd data_dir /var/lib/etcd..
 Member d188c27ec07e24b8 added to cluster c3c85a56b49a373e
 
-ETCD_NAME="etcd-member-ip-10-0-8-253.ap-northeast-1.compute.internal"
-ETCD_INITIAL_CLUSTER="etcd-member-ip-10-0-8-185.ap-northeast-1.compute.internal=https://etcd-0.dapark-ocp43ipi.aws.oshift.net:2380,etcd-member-ip-10-0-8-253.ap-northeast-1.compute.internal=https://etcd-1.dapark-ocp43ipi.aws.oshift.net:2380,etcd-member-ip-10-0-8-39.ap-northeast-1.compute.internal=https://etcd-2.dapark-ocp43ipi.aws.oshift.net:2380"
-ETCD_INITIAL_ADVERTISE_PEER_URLS="https://etcd-1.dapark-ocp43ipi.aws.oshift.net:2380"
+ETCD_NAME="etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal"
+ETCD_INITIAL_CLUSTER="etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal=https://etcd-0.dapark-ocp43ipi.example.com:2380,etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal=https://etcd-1.dapark-ocp43ipi.example.com:2380,etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal=https://etcd-2.dapark-ocp43ipi.example.com:2380"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="https://etcd-1.dapark-ocp43ipi.example.com:2380"
 ETCD_INITIAL_CLUSTER_STATE="existing"
 Starting etcd..
 ```
@@ -177,15 +177,15 @@ Starting etcd..
 ```cmd
 $ oc get pod -n openshift-etcd
 NAME                                                        READY   STATUS    RESTARTS   AGE
-etcd-member-ip-10-0-8-185.ap-northeast-1.compute.internal   2/2     Running   0          98m
-etcd-member-ip-10-0-8-253.ap-northeast-1.compute.internal   2/2     Running   3          24s
-etcd-member-ip-10-0-8-39.ap-northeast-1.compute.internal    2/2     Running   0          98m
+etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal   2/2     Running   0          98m
+etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal   2/2     Running   3          24s
+etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal    2/2     Running   0          98m
 
 $ oc get node -l node-role.kubernetes.io/master=
 NAME                                            STATUS   ROLES    AGE    VERSION
-ip-10-0-8-185.ap-northeast-1.compute.internal   Ready    master   101m   v1.16.2
-ip-10-0-8-253.ap-northeast-1.compute.internal   Ready    master   28m    v1.16.2
-ip-10-0-8-39.ap-northeast-1.compute.internal    Ready    master   100m   v1.16.2
+ip-10-0-68-185.ap-northeast-1.compute.internal   Ready    master   101m   v1.16.2
+ip-10-0-68-253.ap-northeast-1.compute.internal   Ready    master   28m    v1.16.2
+ip-10-0-68-39.ap-northeast-1.compute.internal    Ready    master   100m   v1.16.2
 ```
 
 ```cmd
@@ -193,8 +193,8 @@ sh-4.2#  etcdctl member list -w table
 +------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
 |        ID        | STATUS  |                           NAME                            |                     PEER ADDRS                     |      CLIENT ADDRS       |
 +------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
-| 7270d5446b8a3c49 | started | etcd-member-ip-10-0-8-185.ap-northeast-1.compute.internal | https://etcd-0.dapark-ocp43ipi.aws.oshift.net:2380 | https://10.0.8.185:2379 |
-| d188c27ec07e24b8 | started | etcd-member-ip-10-0-8-253.ap-northeast-1.compute.internal | https://etcd-1.dapark-ocp43ipi.aws.oshift.net:2380 | https://10.0.8.253:2379 |
-| f93356c11e58e088 | started |  etcd-member-ip-10-0-8-39.ap-northeast-1.compute.internal | https://etcd-2.dapark-ocp43ipi.aws.oshift.net:2380 |  https://10.0.8.39:2379 |
+| 7270d5446b8a3c49 | started | etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal | https://etcd-0.dapark-ocp43ipi.example.com:2380 | https://10.0.68.185:2379 |
+| d188c27ec07e24b8 | started | etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal | https://etcd-1.dapark-ocp43ipi.example.com:2380 | https://10.0.68.253:2379 |
+| f93356c11e58e088 | started |  etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal | https://etcd-2.dapark-ocp43ipi.example.com:2380 |  https://10.0.68.39:2379 |
 +------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
 ```

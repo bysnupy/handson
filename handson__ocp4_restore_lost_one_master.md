@@ -9,11 +9,10 @@ you can restore new master and etcd through following recovery procedures.
 
 OpenShift 4.3 AWS IPI, master x3, worker x2.
 
-
 The master nodes are as follows. 
 ```cmd
 $ oc get nodes -l node-role.kubernetes.io/master=
-NAME                                            STATUS   ROLES    AGE   VERSION
+NAME                                             STATUS   ROLES    AGE   VERSION
 ip-10-0-68-185.ap-northeast-1.compute.internal   Ready    master   30m   v1.16.2
 ip-10-0-68-220.ap-northeast-1.compute.internal   Ready    master   29m   v1.16.2
 ip-10-0-68-39.ap-northeast-1.compute.internal    Ready    master   29m   v1.16.2
@@ -22,13 +21,13 @@ ip-10-0-68-39.ap-northeast-1.compute.internal    Ready    master   29m   v1.16.2
 The etcd member list is as follows.
 ```cmd
 sh-4.2# etcdctl member list -w table
-+------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
-|        ID        | STATUS  |                           NAME                            |                     PEER ADDRS                     |      CLIENT ADDRS       |
-+------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
-| 36393ece354b4c2a | started | etcd-member-ip-10-0-68-220.ap-northeast-1.compute.internal | https://etcd-1.dapark-ocp43ipi.example.com:2380 | https://10.0.68.220:2379 |
-| 7270d5446b8a3c49 | started | etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal | https://etcd-0.dapark-ocp43ipi.example.com:2380 | https://10.0.68.185:2379 |
-| f93356c11e58e088 | started |  etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal | https://etcd-2.dapark-ocp43ipi.example.com:2380 |  https://10.0.68.39:2379 |
-+------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
++------------------+---------+------------------------------------------------------------+----------------------------------------------------+--------------------------+
+|        ID        | STATUS  |                           NAME                             |                     PEER ADDRS                     |      CLIENT ADDRS        |
++------------------+---------+------------------------------------------------------------+----------------------------------------------------+--------------------------+
+| 36393ece354b4c2a | started | etcd-member-ip-10-0-68-220.ap-northeast-1.compute.internal | https://etcd-1.ocp43ipi.example.com:2380           | https://10.0.68.220:2379 |
+| 7270d5446b8a3c49 | started | etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal | https://etcd-0.ocp43ipi.example.com:2380           | https://10.0.68.185:2379 |
+| f93356c11e58e088 | started |  etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal | https://etcd-2.ocp43ipi.example.com:2380           |  https://10.0.68.39:2379 |
++------------------+---------+------------------------------------------------------------+----------------------------------------------------+--------------------------+
 ```
 
 ## Recovery procedures
@@ -74,10 +73,10 @@ $ aws ec2 terminate-instances --instance-ids <instance ID of ip-10-0-68-220>
 
 ```cmd
 $ oc get machine -l machine.openshift.io/cluster-api-machine-type=master
-NAME                             PHASE     TYPE        REGION           ZONE              AGE
-dapark-ocp43ipi-2n8rc-master-0   Running   m4.xlarge   ap-northeast-1   ap-northeast-1b   57m
-dapark-ocp43ipi-2n8rc-master-1   Failed    m4.xlarge   ap-northeast-1   ap-northeast-1b   57m
-dapark-ocp43ipi-2n8rc-master-2   Running   m4.xlarge   ap-northeast-1   ap-northeast-1b   57m
+NAME                      PHASE     TYPE        REGION           ZONE              AGE
+ocp43ipi-2n8rc-master-0   Running   m4.xlarge   ap-northeast-1   ap-northeast-1b   57m
+ocp43ipi-2n8rc-master-1   Failed    m4.xlarge   ap-northeast-1   ap-northeast-1b   57m
+ocp43ipi-2n8rc-master-2   Running   m4.xlarge   ap-northeast-1   ap-northeast-1b   57m
 ```
 
 ## Create new master node after delete the failed existing one
@@ -85,32 +84,32 @@ dapark-ocp43ipi-2n8rc-master-2   Running   m4.xlarge   ap-northeast-1   ap-north
 Backup the current "Master" resource and create it again using the manifest you modified to remove "status:", "providerID:", "annotations:" sections.
 
 ```cmd
-$ oc get machine/dapark-ocp43ipi-2n8rc-master-1 -o yaml > master-1.yaml
+$ oc get machine/ocp43ipi-2n8rc-master-1 -o yaml > master-1.yaml
 // Remove "status:", "providerID:" and "annotations:" section from the yaml manifest.
 $ vim edit master-1.yaml
-$ oc delete machine/dapark-ocp43ipi-2n8rc-master-1
+$ oc delete machine/ocp43ipi-2n8rc-master-1
 $ oc create -f ./master-1.yaml
 $ oc get machine -l machine.openshift.io/cluster-api-machine-type=master
-NAME                             PHASE         TYPE        REGION           ZONE              AGE
-dapark-ocp43ipi-2n8rc-master-0   Running       m4.xlarge   ap-northeast-1   ap-northeast-1b   69m
-dapark-ocp43ipi-2n8rc-master-1   Provisioned   m4.xlarge   ap-northeast-1   ap-northeast-1b   26s
-dapark-ocp43ipi-2n8rc-master-2   Running       m4.xlarge   ap-northeast-1   ap-northeast-1b   69m
+NAME                      PHASE         TYPE        REGION           ZONE              AGE
+ocp43ipi-2n8rc-master-0   Running       m4.xlarge   ap-northeast-1   ap-northeast-1b   69m
+ocp43ipi-2n8rc-master-1   Provisioned   m4.xlarge   ap-northeast-1   ap-northeast-1b   26s
+ocp43ipi-2n8rc-master-2   Running       m4.xlarge   ap-northeast-1   ap-northeast-1b   69m
 ```
 
 ## Modify the etcd record as new master private IP in Route 53 on AWS after running new master node
 
 ```cmd
 $ oc get node -l node-role.kubernetes.io/master=
-NAME                                            STATUS   ROLES    AGE   VERSION
+NAME                                             STATUS   ROLES    AGE   VERSION
 ip-10-0-68-185.ap-northeast-1.compute.internal   Ready    master   74m   v1.16.2
 ip-10-0-68-253.ap-northeast-1.compute.internal   Ready    master   69s   v1.16.2   <--- new master node
 ip-10-0-68-39.ap-northeast-1.compute.internal    Ready    master   73m   v1.16.2
 ```
 
-Modify etcd-1 record change as new master node private IP as follows.
+Modify etcd-1 record change as new master node private IP via Route 53 as follows.
 
 ```cmd
-etcd-1.dapark-ocp43ipi.example.com:
+etcd-1.ocp43ipi.example.com:
   10.0.68.220 -> 10.0.68.253
 ```
 
@@ -118,7 +117,7 @@ etcd-1.dapark-ocp43ipi.example.com:
 
 ```cmd
 $ oc get pod
-NAME                                                        READY   STATUS     RESTARTS   AGE
+NAME                                                         READY   STATUS     RESTARTS   AGE
 etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal   2/2     Running    0          76m
 etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal   0/2     Init:1/2   1          4m47s
 etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal    2/2     Running    0          76m
@@ -166,8 +165,8 @@ Removing etcd data_dir /var/lib/etcd..
 Member d188c27ec07e24b8 added to cluster c3c85a56b49a373e
 
 ETCD_NAME="etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal"
-ETCD_INITIAL_CLUSTER="etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal=https://etcd-0.dapark-ocp43ipi.example.com:2380,etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal=https://etcd-1.dapark-ocp43ipi.example.com:2380,etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal=https://etcd-2.dapark-ocp43ipi.example.com:2380"
-ETCD_INITIAL_ADVERTISE_PEER_URLS="https://etcd-1.dapark-ocp43ipi.example.com:2380"
+ETCD_INITIAL_CLUSTER="etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal=https://etcd-0.ocp43ipi.example.com:2380,etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal=https://etcd-1.ocp43ipi.example.com:2380,etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal=https://etcd-2.ocp43ipi.example.com:2380"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="https://etcd-1.ocp43ipi.example.com:2380"
 ETCD_INITIAL_CLUSTER_STATE="existing"
 Starting etcd..
 ```
@@ -178,13 +177,13 @@ You can remove generated pending CSRs with "oc delete csr <csr name of new etcd>
 
 ```cmd
 $ oc get pod -n openshift-etcd
-NAME                                                        READY   STATUS    RESTARTS   AGE
+NAME                                                         READY   STATUS    RESTARTS   AGE
 etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal   2/2     Running   0          98m
 etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal   2/2     Running   3          24s
 etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal    2/2     Running   0          98m
 
 $ oc get node -l node-role.kubernetes.io/master=
-NAME                                            STATUS   ROLES    AGE    VERSION
+NAME                                             STATUS   ROLES    AGE    VERSION
 ip-10-0-68-185.ap-northeast-1.compute.internal   Ready    master   101m   v1.16.2
 ip-10-0-68-253.ap-northeast-1.compute.internal   Ready    master   28m    v1.16.2
 ip-10-0-68-39.ap-northeast-1.compute.internal    Ready    master   100m   v1.16.2
@@ -192,11 +191,11 @@ ip-10-0-68-39.ap-northeast-1.compute.internal    Ready    master   100m   v1.16.
 
 ```cmd
 sh-4.2#  etcdctl member list -w table
-+------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
-|        ID        | STATUS  |                           NAME                            |                     PEER ADDRS                     |      CLIENT ADDRS       |
-+------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
-| 7270d5446b8a3c49 | started | etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal | https://etcd-0.dapark-ocp43ipi.example.com:2380 | https://10.0.68.185:2379 |
-| d188c27ec07e24b8 | started | etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal | https://etcd-1.dapark-ocp43ipi.example.com:2380 | https://10.0.68.253:2379 |
-| f93356c11e58e088 | started |  etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal | https://etcd-2.dapark-ocp43ipi.example.com:2380 |  https://10.0.68.39:2379 |
-+------------------+---------+-----------------------------------------------------------+----------------------------------------------------+-------------------------+
++------------------+---------+------------------------------------------------------------+----------------------------------------------------+--------------------------+
+|        ID        | STATUS  |                           NAME                             |                     PEER ADDRS                     |      CLIENT ADDRS        |
++------------------+---------+------------------------------------------------------------+----------------------------------------------------+--------------------------+
+| 7270d5446b8a3c49 | started | etcd-member-ip-10-0-68-185.ap-northeast-1.compute.internal | https://etcd-0.ocp43ipi.example.com:2380           | https://10.0.68.185:2379 |
+| d188c27ec07e24b8 | started | etcd-member-ip-10-0-68-253.ap-northeast-1.compute.internal | https://etcd-1.ocp43ipi.example.com:2380           | https://10.0.68.253:2379 |
+| f93356c11e58e088 | started |  etcd-member-ip-10-0-68-39.ap-northeast-1.compute.internal | https://etcd-2.ocp43ipi.example.com:2380           |  https://10.0.68.39:2379 |
++------------------+---------+------------------------------------------------------------+----------------------------------------------------+--------------------------+
 ```

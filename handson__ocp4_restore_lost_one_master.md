@@ -172,8 +172,8 @@ ETCD_INITIAL_CLUSTER_STATE="existing"
 Starting etcd..
 ```
 
-You can remove pending CSR for etcd-1 generated when new master starts with "oc delete csr <csr name of new etcd>".
-
+You can remove generated pending CSRs with "oc delete csr <csr name of new etcd>" for added new etcd-1, because we restored backup certiicate set for added new etcd.
+  
 ## Verify whether the added etcd and master are recovered without any issue
 
 ```cmd

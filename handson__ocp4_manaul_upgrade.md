@@ -26,7 +26,7 @@ $ oc adm -a ${LOCAL_SECRET_JSON} release mirror \
   --to-release-image=${LOCAL_REGISTRY}/${LOCAL_REPOSITORY}:${OCP_RELEASE}
 ```
 
-### Take a node your target version release image digest from above command output.
+### Take a note the digest of your target version release image from the above command output.
 ```
 info: Mirroring 103 images to mirror.priv.example.com:5000/ocp4/openshift4 ...
 mirror.priv.example.com:5000/

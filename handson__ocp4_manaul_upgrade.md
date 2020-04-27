@@ -2,7 +2,7 @@
 
 ## Summary
 
-Show you how to upgrade OCP4.3 cluster from 4.3.0 to 4.3.13 in restricted network.
+I'd like to demonstrate you how to upgrade OCP4.3 cluster from 4.3.0 to 4.3.13 in restricted network.
 
 ## Mirror the release images from 4.3.0 to 4.3.13
 

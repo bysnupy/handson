@@ -28,9 +28,15 @@ You should consider "DocumentRoot" for access context on its pod, because OCP4 d
 But as you can see here: https://github.com/openshift/origin/issues/20474, the feature will be added soon on the new OCP4.z. 
 
 ```cmd
-$ oc run -n project-a poda --image=registry.access.redhat.com/rhel7 -- bash -c 'mkdir -p /tmp/test/svca; cd /tmp/test; echo "SERVICE A" > svca/index.html; python -m SimpleHTTPServer 8080'
+$ oc run -n project-a poda \
+  --image=registry.access.redhat.com/rhel7 \
+  -- bash -c \
+  'mkdir -p /tmp/test/svca; cd /tmp/test; echo "SERVICE A" > svca/index.html; python -m SimpleHTTPServer 8080'
 
-$ oc run -n project-b podb --image=registry.access.redhat.com/rhel7 -- bash -c 'mkdir -p /tmp/test/svcb; cd /tmp/test; echo "SERVICE B" > svcb/index.html; python -m SimpleHTTPServer 8080'
+$ oc run -n project-b podb \
+  --image=registry.access.redhat.com/rhel7 \
+  -- bash -c \
+  'mkdir -p /tmp/test/svcb; cd /tmp/test; echo "SERVICE B" > svcb/index.html; python -m SimpleHTTPServer 8080'
 ```
 
 ### Create each service with running each pod label selector on its project

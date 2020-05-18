@@ -14,7 +14,7 @@ Refer [Kubernetes Resources](https://docs.openshift.com/container-platform/3.11/
 
 For detecting the image change through ImageStream object, so we create the ImageStreamTag using the target images.
 
-```
+```cmd
 $ oc import-image docker.io/openshiftroadshow/parksmap-katacoda:1.0.0 --confirm
 imagestream.image.openshift.io/parksmap-katacoda imported
 
@@ -55,7 +55,7 @@ Note the above sha256 identifier for comparing for the image change trigger targ
 
 This Deployment has just one container and the container refer the image directly using registry URL.
 
-```
+```cmd
 $ oc get deploy/test -o yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -97,13 +97,13 @@ status:
 
 Set the trigger with ImageStream name using "--from-image" option as follows.
 
-```
+```cmd
 $ oc set triggers deployment/test -c parksmap-katacoda --from-image parksmap-katacoda:latest
 deployment.extensions/test triggers updated
 ```
 You can see "image.openshift.io/triggers" annotation and "image:" section was changed same with the ImageStreamTag sha256 identifier.
 
-```
+```cmd
 $ oc get deploy/test -o yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -146,7 +146,7 @@ status:
 
 Update the ImageStream with new image and watch the "image:" section changed with new image sha256 identifier automatically after that.
 
-```
+```cmd
 $ oc tag docker.io/openshiftroadshow/parksmap-katacoda:1.2.0 parksmap-katacoda:latest 
 Tag parksmap-katacoda:latest set to docker.io/openshiftroadshow/parksmap-katacoda:1.2.0.
 

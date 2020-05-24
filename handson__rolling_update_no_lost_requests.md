@@ -7,7 +7,7 @@ The other pattern is configured probes based on service healthy check.
 
 You may learn why we configure the probes based on the service health check through comparison of the above two patterns.
 
-![ocp4 rolling_update](https://github.com/bysnupy/handson/blob/master/ocp4_rolling_update_dc.png)
+![ocp4 rolling_update](https://github.com/bysnupy/handson/blob/master/ocp4_rolling_update_deploymentconfig.png)
 
 ## Compare the testing systems
 

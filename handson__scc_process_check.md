@@ -13,6 +13,15 @@ Let's see how to process and applied the SCCs to the Pod through Admission Contr
 3. If there are no SCCs within the list, the pod will be rejected.
 4. If there is a SCC to meet the reuqested pecifications of the pod, it is accepted.
 
+## Additional Information
+### Security Context Constraints design proposals
+https://github.com/openshift/origin/blob/master/docs/proposals/security-context-constraints.md#admission
+
+### "FindApplicableSCCs" is returned SCCs are sorted by priority
+https://github.com/openshift/apiserver-library-go/blob/release-4.5/pkg/securitycontextconstraints/sccmatching/matcher.go#L40-L67
+
+### "computeSecurityContext" is returned the valid pod after validation through Admission controller
+https://github.com/openshift/apiserver-library-go/blob/release-4.5/pkg/securitycontextconstraints/sccadmission/admission.go#L193-L237
 
 ## Demonstration
 

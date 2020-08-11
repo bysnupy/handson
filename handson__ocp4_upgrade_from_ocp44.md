@@ -57,7 +57,7 @@ Updating to release image mirror-reg.ocp.rhev.local:5000/ocp4/openshift4@sha256:
 ## Upgrade state on the web console
 
 ### Before upgrade
-![ocp45_upgrade_before](https://github.com/bysnupy/handson/blob/master/ocp4_ocp45_upgrade_before.png)
+![ocp45_upgrade_before](https://github.com/bysnupy/handson/blob/master/ocp4_upgrade_from_ocp44_before.png)
 
 ### After upgrade
-![ocp45_upgrade_after](https://github.com/bysnupy/handson/blob/master/ocp4_ocp45_upgrade_after.png)
+![ocp45_upgrade_after](https://github.com/bysnupy/handson/blob/master/ocp4_upgrade_from_ocp44_after.png)

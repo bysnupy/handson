@@ -68,6 +68,48 @@ $ oc get pod test-2-gzdjv -o yaml | grep scc
       openshift.io/scc: anyuid
 ```
 
+### Other example
+```console
+$ oc get scc
+NAME               PRIV    CAPS         SELINUX     RUNASUSER          FSGROUP     SUPGROUP    PRIORITY     READONLYROOTFS   VOLUMES
+anyuid             false   <no value>   MustRunAs   RunAsAny           RunAsAny    RunAsAny    10           false            [configMap downwardAPI emptyDir persistentVolumeClaim projected secret]
+hostaccess         false   <no value>   MustRunAs   MustRunAsRange     MustRunAs   RunAsAny    <no value>   false            [configMap downwardAPI emptyDir hostPath persistentVolumeClaim projected secret]
+hostmount-anyuid   false   <no value>   MustRunAs   RunAsAny           RunAsAny    RunAsAny    <no value>   false            [configMap downwardAPI emptyDir hostPath nfs persistentVolumeClaim projected secret]
+hostnetwork        false   <no value>   MustRunAs   MustRunAsRange     MustRunAs   MustRunAs   <no value>   false            [configMap downwardAPI emptyDir persistentVolumeClaim projected secret]
+node-exporter      true    <no value>   RunAsAny    RunAsAny           RunAsAny    RunAsAny    <no value>   false            [*]
+nonroot            false   <no value>   MustRunAs   MustRunAsNonRoot   RunAsAny    RunAsAny    <no value>   false            [configMap downwardAPI emptyDir persistentVolumeClaim projected secret]
+privileged         true    [*]          RunAsAny    RunAsAny           RunAsAny    RunAsAny    <no value>   false            [*]
+restricted         false   <no value>   MustRunAs   MustRunAsRange     MustRunAs   RunAsAny    <no value>   false            [configMap downwardAPI emptyDir persistentVolumeClaim projected secret]
+
+$ oc adm policy add-scc-to-user hostnetwork -z default
+
+$ oc run test --image registry.redhat.io/rhel7 -- tail -f /dev/null
+
+$ oc get pod
+NAME            READY     STATUS    RESTARTS   AGE
+test-1-hgt9l   1/1       Running   0          40m
+
+$ oc get pod test-1-hgt9l -o yaml | grep scc
+    openshift.io/scc: restricted
+    
+$ oc edit dc/test
+:
+spec:
+  hostNetwork: true    <--- Configure this as "hostnetwork" SCC request condition
+  containers:
+:
+
+$ oc get pod
+NAME            READY     STATUS    RESTARTS   AGE
+test-2-34ghzn   1/1       Running   0          40m
+
+$ oc get pod test-2-34ghzn -o yaml
+:
+      openshift.io/scc: hostnetwork
+:
+    serviceAccountName: default
+```
+
 ## Additional Information
 
 ### Security Context Constraints design proposals

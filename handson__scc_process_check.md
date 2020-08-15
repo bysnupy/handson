@@ -1,27 +1,24 @@
-# How to validate the SCCs on the Admission Controller
+# How to work the Security Context Constraint on OpenShift
 
 ## Summary
 
-Let's see how to process and applied the SCCs to the Pod through Admission Controller.
+I simply walk through SCC process with some examples here. 
 
-## Process flow on the Admission
+## Process flow
 
-![ocp4 scc flow chart](https://github.com/bysnupy/handson/blob/master/ocp4_scc_flow_chart.png)
+Basically, the Security Context Constraint(SCC) control over permissions for pods on OpenShift.
+The set of SCCs authorized a pod are determined by the operation user identity and specified service account.
+We are easy to think that it only considers "Priority" attribute of the SCCs to decide it, 
+but additionally requested permissions or capabilities also considers to find an appropriate SCC for the pods or containers.
+Let me summarize the process as follows.
 
-1. Retrieve all security context constraints available for use by the user based on Priority of the SCCs.
-2. Loop through the SCCs list in the order of Priority for looking up any one which meet any requests on the pod specifications. 
-3. If there are no SCCs within the list, the pod will be rejected.
-4. If there is a SCC to meet the reuqested pecifications of the pod, it is accepted.
+![ocp4 scc process_flow](https://github.com/bysnupy/handson/blob/master/ocp4_scc_process_flow.png)
 
-## Additional Information
-### Security Context Constraints design proposals
-https://github.com/openshift/origin/blob/master/docs/proposals/security-context-constraints.md#admission
-
-### "FindApplicableSCCs" is returned SCCs are sorted by priority
-https://github.com/openshift/apiserver-library-go/blob/release-4.5/pkg/securitycontextconstraints/sccmatching/matcher.go#L40-L67
-
-### "computeSecurityContext" is returned the valid pod after validation through Admission controller
-https://github.com/openshift/apiserver-library-go/blob/release-4.5/pkg/securitycontextconstraints/sccadmission/admission.go#L193-L237
+1. Retrieve all available SCCs from user identity or specified service account.
+2. Sort the SCCs by "Priority", higher SCC will process first than lower.
+3. Check the requested conditions of the pod to each of sorted SCCs.
+4. If one SCC can be matched completely with all conditions, then pod will create and run with the SCC.
+5. If not, the pod will be failed.
 
 ## Demonstration
 
@@ -70,5 +67,16 @@ test-2-gzdjv   1/1       Running   0          28m
 $ oc get pod test-2-gzdjv -o yaml | grep scc
       openshift.io/scc: anyuid
 ```
+
+## Additional Information
+
+### Security Context Constraints design proposals
+https://github.com/openshift/origin/blob/master/docs/proposals/security-context-constraints.md#admission
+
+### "FindApplicableSCCs" is returned SCCs are sorted by priority
+https://github.com/openshift/apiserver-library-go/blob/release-4.5/pkg/securitycontextconstraints/sccmatching/matcher.go#L40-L67
+
+### "computeSecurityContext" is returned the valid pod after validation through Admission controller
+https://github.com/openshift/apiserver-library-go/blob/release-4.5/pkg/securitycontextconstraints/sccadmission/admission.go#L193-L237
 
 Done.

@@ -386,6 +386,7 @@ SERVICE D
 ```
 
 Kiali graph,
+
 ![servicemesh access flow from kiali](https://github.com/bysnupy/handson/blob/master/ocp4_kiali_ingressgateway_access_flows.png)
 
 

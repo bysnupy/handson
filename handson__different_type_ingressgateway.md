@@ -1,4 +1,4 @@
-# How to define each type of the IngressGateway on OpenShift ServiceMesh
+# How to expose the services using each type of the IngressGateway on OpenShift ServiceMesh
 
 ## Summary
 

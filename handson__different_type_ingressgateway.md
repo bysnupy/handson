@@ -417,13 +417,13 @@ EOF
 ### Access test and check the flow on the Kiali
 
 ```console
-$ curl -s http://service-c.ossm.example.com/svcc/
+$ curl -s http://service-a.ossm.example.com/svca/
 SERVICE A
-$ curl -s http://service-c.ossm.example.com/svcc/
+$ curl -s http://service-b.ossm.example.com/svcb/
 SERVICE B
 $ curl -s http://service-c.ossm.example.com/svcc/
 SERVICE C
-$ curl -s http://service-c.ossm.example.com/svcc/
+$ curl -s http://service-d.ossm.example.com/svcd/
 SERVICE D
 ```
 

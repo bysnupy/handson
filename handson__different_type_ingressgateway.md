@@ -9,8 +9,8 @@ I'd like to show you how to configure additional IngressGateway pod for each typ
 
 Ingress name| Type | Description
 -|-|-
-istio-ingressgateway| ClusterIP | Default
-second-ingressgateway| ClusterIP| Added one, accessing through router ingress pod
+istio-ingressgateway| ClusterIP | Default, it's required Route resource to access
+second-ingressgateway| ClusterIP| Added other one with the same type, it's required Route resource to access
 nodeport-ingressgateway| NodePort| Required to configure your LB, and DNS manually
 loadbalancer-ingressgateway| LoadBalancer| Maybe required to configure your Gateway hostname DNS
 
@@ -162,7 +162,7 @@ second-ingressgateway         ClusterIP      172.30.98.214    <none>            
 ### Create test pod and service at each projet
 
 ```console
-for seqnum in a b c d; do
+$ for seqnum in a b c d; do
 oc create -n project-${seqnum} -f - <<EOF
 apiVersion: v1
 kind: Pod
@@ -209,6 +209,8 @@ done
 
 ### Create Gateway and VirtualService for each Service on each project
 
+I suggest you to use "app" label instead of "istio" key, because "istio" label is used by Networkpolicy and other restriction rules.
+
 For servie A, it is controlled over by Default IngressGateway
 ```console
 $ oc create -n project-a -f - <<EOF
@@ -218,7 +220,7 @@ metadata:
   name: service-a-gw
 spec:
   selector:
-    istio: ingressgateway
+    app: ingressgateway
   servers:
   - port:
       number: 80

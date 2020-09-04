@@ -248,6 +248,27 @@ spec:
 EOF
 ```
 
+For exposing ClusterIP service externally, you should add route resource with the hostname.
+```console
+$ oc create -n istio-system -f - <<EOF
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: service-a
+  namespace: istio-system
+spec:
+  host: service-a.ossm.example.com
+  subdomain: ''
+  to:
+    kind: Service
+    name: istio-ingressgateway
+    weight: 100
+  port:
+    targetPort: http2
+  wildcardPolicy: None
+EOF
+```
+
 For service B, it is controlled over by Additional ClusterIP type IngressGateway, second-ingressgateway.
 "service-b.ossm.example.com" should be resolved VIP for Ingress router.
 ```console
@@ -285,6 +306,27 @@ spec:
         port:
           number: 8080
         host: service-b
+EOF
+```
+
+For exposing ClusterIP service externally, you should add route resource with the hostname.
+```console
+$ oc create -n istio-system -f - <<EOF
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: service-b
+  namespace: istio-system
+spec:
+  host: service-b.ossm.example.com
+  subdomain: ''
+  to:
+    kind: Service
+    name: second-ingressgateway
+    weight: 100
+  port:
+    targetPort: http2
+  wildcardPolicy: None
 EOF
 ```
 

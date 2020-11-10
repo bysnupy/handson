@@ -110,6 +110,9 @@ Error from server: Get "https://192.168.9.32:10250/containerLogs/openshift-etcd/
 
 In this case, I will reuse the removed master1 hostname and IP address for new master1 VM.
 
+![new master1 installation](https://github.com/bysnupy/handson/blob/master/ocp4__new_master1_coreos_install.png)
+
+
 ```console
 # oc get node
 NAME                               STATUS     ROLES    AGE     VERSION

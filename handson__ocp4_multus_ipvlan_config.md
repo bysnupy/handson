@@ -10,7 +10,7 @@ If you need more information about CNI, then it's helpful to refer [Using the Mu
 
 I will demonstrate to add two ipvlan interface for a test pod, and test to connect each external network configured different networks. The following figure describes this in details.
 
-![ipvlan_flow]()
+![ipvlan_flow](https://github.com/bysnupy/handson/blob/master/ocp4__ipvlan_flow_diagram.png)
 
 ## Configurations
 

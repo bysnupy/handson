@@ -1,4 +1,4 @@
-# How to trace the request from external sources the L4 traffic on the OpenShift with AWS
+# How to trace the network from external sources the L4 traffic on the OpenShift with AWS
 
 ## Capture the tcpdump
 
@@ -112,6 +112,8 @@ service/router-default annotated
 ### Create flow log in your VPC
 
 We can specify above S3 bucket ARN this time again without additional configurations.
+
+![ipvlan_flow](https://github.com/bysnupy/handson/blob/master/ocp4__create_flowlogs.png)
 
 ## Access with request-id header
 

@@ -4,7 +4,7 @@
 
 Let's see how to trace the network traffic from a client to a backend pod on OCP with AWS.
 
-![ipvlan_flow](https://github.com/bysnupy/handson/blob/master/ocp4__trace_traffic_aws.png)
+![ipvlan_flow](https://github.com/bysnupy/handson/blob/master/ocp4__trace_traffic_in_aws.png)
 
 ### Check the nodes running the router pods
 ```console

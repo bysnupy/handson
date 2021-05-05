@@ -1,5 +1,5 @@
 # handson
-Various handsons for certain configurations
+Various hands-ons for certain configurations
 
 I used to upload a article to my [Medium blog](https://daein.medium.com/) after correct English phrase, typo and adding more figures.
 So if you'd like to refer the same article well-written, I recommend to access my blog.

@@ -62,12 +62,15 @@ Creating 3 public subnets as repeating the following operation.
 
 ## Create each routing table for each private subnet
 
-Public subnet routing table is used with the VPC default routing tables by default.
-So we need to create another routing table for private tables as follows
+In this case, the public subnet routing table is used with the VPC default routing tables by default.
+You can custom your public subnet routing table according to your use cases. Such as creating each routing table for each public subnet.
+Anyway we need to create another routing table for each private tables as reating the following operations.
 
 ![vpc12](https://github.com/bysnupy/handson/blob/master/images/vpc12.png)
 
-Change current routing table association to new one as follows.
+Change current routing table association to new each one as follows.
+We need to configure each NAT Gateway to each routing table on each private subnet.
+This is more stable than sharing one NAT Gateway with all private subnet. 
 
 ![vpc13](https://github.com/bysnupy/handson/blob/master/images/vpc13.png)
 

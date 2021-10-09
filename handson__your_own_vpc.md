@@ -20,8 +20,7 @@ platform:
   aws:
     region: ap-northeast-1
     userTags:
-      user: dapark
-      adminContact: dapark
+      user: test
     subnets:
     - subnet-08b0dcab7875eaa71
     - subnet-0371bc505996d580f

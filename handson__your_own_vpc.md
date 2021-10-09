@@ -1,6 +1,6 @@
 # Creating you own VPC for OpenShift v4
 
-I walk you through how to create you VPC manually to install OCPv4 on AWS dashboard.
+I walk you through how to create your VPC manually to install OCPv4 on AWS dashboard.
 
 ## Preparations to create your VPC
 

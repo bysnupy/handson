@@ -1,4 +1,4 @@
-#Test for recovery of the expired certificates after the just installed cluster shutdown within 24 hours
+# Test for recovery of the expired certificates after the just installed cluster shutdown within 24 hours
 
 This test is based on [Recovering from expired control plane certificates](https://docs.openshift.com/container-platform/4.6/backup_and_restore/disaster_recovery/scenario-3-expired-certs.html).
 And it's conducted to OCP v4.6.1 on AWS.

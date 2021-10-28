@@ -30,6 +30,7 @@ List
 - [Alter the Scheduler Profile configurations](https://github.com/bysnupy/handson/blob/master/handson__scheduler_profile_test.md)
 - [How to trace the network from external sources the L4 traffic on the OpenShift with AWS](https://github.com/bysnupy/handson/blob/master/handson__trace_network_in_aws.md)
 - [Creating you own VPC for OpenShift v4](https://github.com/bysnupy/handson/blob/master/handson__your_own_vpc.md)
+- [Test mirroring images for using OLM through external registry](https://github.com/bysnupy/handson/blob/master/handson__mirroring_olm_operator_img.md)
 - WIP: [Service Mesh v2:How to expose IngressGateway in OpenShift](https://github.com/bysnupy/handson/blob/master/handson__servicemesh_v2_ingressgateway.md)
 - WIP: [How to test ClousterLogForwarder with inseucre and secure Forwarding](https://github.com/bysnupy/handson/blob/master/handson__test_logforwarder.md)
 

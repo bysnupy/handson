@@ -33,5 +33,6 @@ List
 - [Test mirroring images for using OLM through external registry](https://github.com/bysnupy/handson/blob/master/handson__mirroring_olm_operator_img.md)
 - WIP: [Service Mesh v2:How to expose IngressGateway in OpenShift](https://github.com/bysnupy/handson/blob/master/handson__servicemesh_v2_ingressgateway.md)
 - WIP: [How to test ClousterLogForwarder with inseucre and secure Forwarding](https://github.com/bysnupy/handson/blob/master/handson__test_logforwarder.md)
+- WIP: [How to update the Operator using mirroring images](https://github.com/bysnupy/handson/blob/master/handson__update_olm_using_mirror_images.md)
 
 [![License](https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-nd/4.0/)

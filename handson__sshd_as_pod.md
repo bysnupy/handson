@@ -2,7 +2,7 @@
 
 ## Summary
 
-It's just a kind of curious. I don't sugget running sshd as pod basically. I have not seen the use case required to run sshd ever.
+It's just a kind of curious. I don't suggest running ssh as pod basically. But it can be considered for some special needs.
 
 ## 1. Create an image for test sshd server and client as follows
 The following Dockerfile is based on [moby/docs/example](https://github.com/moby/moby/blob/docs/docs/examples/running_ssh_service.Dockerfile).

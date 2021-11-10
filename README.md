@@ -6,6 +6,7 @@ So if you'd like to refer the same article well-written, I recommend to access m
 
 List
 
+- [How to run sshd as Pod on OpenShift v4](https://github.com/bysnupy/handson/blob/master/handson__sshd_as_pod.md)
 - [What metrics are used in Console Overview Status on OCPv4](https://github.com/bysnupy/handson/blob/master/handson__cluster_health_check_metrics.md)
 - [How to configure AWS Network Load Balancer for an Ingress Controller on OpenShift](https://github.com/bysnupy/handson/blob/master/handson__configure_NLB_for_ingress.md)
 - [OpenShift cross namespace ingress as of OCP4.4](https://github.com/bysnupy/handson/blob/master/handson__cross_projects_ingress.md)

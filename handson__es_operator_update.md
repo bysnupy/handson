@@ -44,6 +44,8 @@ green  open   .security    r4favAOWTGqZBG2MoZQv7w   1   1          6            
 
 1. I've changed Elasticsearch Operator channel from stable-5.2 to stable-5.3 at 08:51:49.
 
+![update](https://github.com/bysnupy/handson/blob/master/images/esupdate1.png)
+
 2. old elasticsearch-operator pod was terminated with the following messages.
 ```json
 {"_ts":"2021-12-16T08:52:14.290683224Z","_level":"0","_component":"elasticsearch-operator_controller","_message":"Reconciler error","_error":{"msg":"Operation cannot be fulfilled on kibanas.logging.openshift.io \"kibana\": the object has been modified; please apply your changes to the latest version and try again"},"controller":"kibana-controller","name":"kibana","namespace":"openshift-logging"}
@@ -76,7 +78,10 @@ elasticsearch-cdm-0p4w6uqm-2-bf568467d-dbh55         1/2     Running            
 elasticsearch-cdm-0p4w6uqm-3-55d767b5f9-cthnh        0/2     ContainerCreating   0          1s      <none>     
 ```
 
-Sudden all ES pods were failed to start and started logging ES service failure logs from elasicsearch-operator logs.
+4. Sudden all ES pods were failed to start and started logging ES service failure logs from elasicsearch-operator logs.
+
+![update](https://github.com/bysnupy/handson/blob/master/images/esupdate2.png)
+
 ```json
 // Start logging the ES service failure.
 {"_ts":"2021-12-16T08:54:44.442324949Z","_level":"0","_component":"elasticsearch-operator","_message":"failed to perform rolling update","_error":{"msg":"Get \"https://elasticsearch.openshift-logging.svc:9200/_cluster/state/nodes\": local error: tls: bad record MAC"}}
@@ -91,7 +96,7 @@ elasticsearch-cdm-0p4w6uqm-2-bf568467d-dbh55         1/2     Running     0      
 elasticsearch-cdm-0p4w6uqm-3-55d767b5f9-cthnh        1/2     Running     0          69s     10.129.2.68
 ```
 
-For a while, the same error messages were shown, then all the ES pods status transitioned to "Running" and all service is also back to available.
+5. For a while, the same error messages were shown, then all the ES pods status transitioned to "Running" and all service is also back to available.
 ```json
 :
 {"_ts":"2021-12-16T08:55:15.430282952Z","_level":"0","_component":"elasticsearch-operator","_message":"unable to update node","_error":{"msg":"Get \"https://elasticsearch.openshift-logging.svc:9200/_cluster/state/nodes\": dial tcp 172.30.171.225:9200: connect: connection refused"},"cluster":"elasticsearch","namespace":"openshift-logging"}
@@ -107,7 +112,7 @@ elasticsearch-cdm-0p4w6uqm-2-bf568467d-dbh55         2/2     Running     0      
 elasticsearch-cdm-0p4w6uqm-3-55d767b5f9-cthnh        2/2     Running     0          105s    10.129.2.68
 ```
 
-Updated all ES and kibana pods status is as follows.
+## Updated all ES and kibana pods status is as follows.
 ```cmd
 ==== 08:55:41
 NAME                                                 READY   STATUS      RESTARTS   AGE     IP             NODE                                              NOMINATED NODE   READINESS GATES
@@ -128,7 +133,7 @@ ip-10-0-177-180ap-northeast-1computeinternal-debug   1/1     Running     0      
 kibana-59bb4f66d7-htczk                              2/2     Running     0          3m24s   10.131.0.41    ip-10-0-169-247.ap-northeast-1.compute.internal   <none>           <none>
 ```
 
-ES health and index status were all green.
+ES health and index status were all ok.
 ```cmd
 $ oc exec elasticsearch-cdm-0p4w6uqm-1-7dc8f88dbf-8sbzb -- health
 Defaulted container "elasticsearch" out of: elasticsearch, proxy

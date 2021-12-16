@@ -6,6 +6,7 @@ So if you'd like to refer the same article well-written, I recommend to access m
 
 List
 
+- [Elasticsearch Operator update test from 5.2.4-17 to 5.3.1-12](https://github.com/bysnupy/handson/blob/master/handson__es_operator_update.md)
 - [How to create LocalVolume using wwn(world wide name)](https://github.com/bysnupy/handson/blob/master/handson__creating_localvolume.md)
 - [How to run sshd as Pod on OpenShift v4](https://github.com/bysnupy/handson/blob/master/handson__sshd_as_pod.md)
 - [What metrics are used in Console Overview Status on OCPv4](https://github.com/bysnupy/handson/blob/master/handson__cluster_health_check_metrics.md)

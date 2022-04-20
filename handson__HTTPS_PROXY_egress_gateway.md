@@ -16,6 +16,7 @@ It has been tested in OpenShift Service Mesh 2.1.1.
 Endpoint Name|IP|Port|Description
 -|-|-|-
 myproxy.istio-system.svc.cluster.local|10.0.0.15|8080|Headless Service Name mapped with the external squid proxy
+istio-egressgateway.istio-system.svc.cluster.local|10.131.1.111|7777|Egress Gateway service entrypoints
 
 Test project has been created as "test-proxy" in advance.
 And you can also deploy a test pod referred as sleep pod in this test through [Before you begin](https://istio.io/latest/docs/tasks/traffic-management/egress/egress-gateway/#before-you-begin).

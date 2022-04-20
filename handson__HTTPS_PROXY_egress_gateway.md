@@ -230,3 +230,7 @@ $ kubectl exec -c sleep deploy/sleep -n test-proxy -- sh -c "HTTPS_PROXY=10.0.0.
 1650436832.158  18967 10.0.0.98 TCP_TUNNEL/200 90274 CONNECT en.wikipedia.org:443 - HIER_DIRECT/208.80.154.224 -
 1650436864.094   3333 10.0.0.98 TCP_TUNNEL/200 90305 CONNECT en.wikipedia.org:443 - HIER_DIRECT/208.80.154.224 -
 ```
+### Kiali graph visualization
+
+![update](https://github.com/bysnupy/handson/blob/master/images/handson__https_proxy1.png)
+

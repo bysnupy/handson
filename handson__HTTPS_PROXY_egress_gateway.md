@@ -19,7 +19,7 @@ myproxy.istio-system.svc.cluster.local|10.0.0.15|8080|Headless Service Name mapp
 istio-egressgateway.istio-system.svc.cluster.local|10.131.1.111|7777|Egress Gateway service entrypoints
 
 Test project has been created as "test-proxy" in advance.
-And you can also deploy a test pod referred as sleep pod in this test through [Before you begin](https://istio.io/latest/docs/tasks/traffic-management/egress/egress-gateway/#before-you-begin).
+And you can also deploy a test pod which is referred to as sleep pod in this test through [Before you begin](https://istio.io/latest/docs/tasks/traffic-management/egress/egress-gateway/#before-you-begin).
 
 ## Manifests
 *NOTE:*

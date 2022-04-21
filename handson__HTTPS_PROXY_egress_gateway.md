@@ -27,6 +27,11 @@ Most important thing is the service name resolution at both istio-system and use
 And we should define two VirtualService and DestinationRule each for egress-gateway and external proxy routings.
 
 ### ServiceEntry and k8s Service and Endpoint for the external proxy
+
+You can any resource and solution to resolve your external proxy hostname here.
+In this test, I've configured it as Headless Services, because usually proxy is used with internal IP and it would not be resolved by internal DNS.
+You can also use externalName or another hostname which can resolve through DNS instead of it.
+
 ```yaml
 kind: Service
 apiVersion: v1
